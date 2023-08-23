@@ -64,3 +64,16 @@ log('Running TestCafe...');
 log(testCafeCmdArg || testCafeCmd);
 
 execSync(`${xvfbCmd}${testCafeCmdArg || testCafeCmd} ${testCafeArguments}`, { stdio: 'inherit' });
+
+log('Running TestCafe with xvfb...');
+const fullCommand = `${xvfbCmd}${testCafeCmd} ${testCafeArguments}`;
+log('Executing command:', fullCommand);
+
+try {
+    const output = execSync(fullCommand, { stdio: 'inherit', encoding: 'utf-8' });
+    log('Command output:', output);
+} catch (error) {
+    log('Error:', error.message);
+    log('Error output:', error.stderr.toString());
+    process.exit(1); // Exit with an error code
+}
