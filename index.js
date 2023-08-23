@@ -1,4 +1,4 @@
-const os = require('os');
+const os           = require('os');
 const { execSync } = require('child_process');
 const { getInput } = require('@actions/core');
 
@@ -13,13 +13,13 @@ function getInputStr (argValue) {
     return argValue;
 }
 
+const testCafeCmdArg = getInput('cmd');
 const testCafeArguments = getInput('args');
 
-const version     = getInput('version');
-const branch      = getInput('branch');
-const commit      = getInput('commit');
-const skipInstall = getInput('skip-install') === 'true';
-const branchCmd   = branch && !commit ? `-b ${branch}` : '';
+const version   = getInput('version');
+const branch    = getInput('branch');
+const commit    = getInput('commit');
+const branchCmd = branch && !commit ? `-b ${branch}` : '';
 
 const gitCloneCmd    = `git clone https://github.com/DevExpress/testcafe.git ${branchCmd}`;
 const gitCheckoutCmd = `git -C testcafe checkout ${commit}`;
@@ -29,7 +29,6 @@ let testCafeCmd = '';
 log(`VERSION: ${getInputStr(version)}`);
 log(`BRANCH: ${getInputStr(branch)}`);
 log(`COMMIT: ${getInputStr(commit)}`);
-log(`SKIP INSTALL: ${skipInstall}`);
 
 if (branch || commit) {
     log('Cloning the TestCafe repository...');
@@ -45,20 +44,23 @@ if (branch || commit) {
 
     log('Building TestCafe...');
     execSync(`cd testcafe && npx gulp fast-build`, { stdio: 'inherit' });
+
     testCafeCmd = 'node testcafe/bin/testcafe';
 }
 else {
-    if (!skipInstall) {
-        log('Installing TestCafe from npm...');
-        execSync(`npm i testcafe@${version}`);
-    }
+    log('Installing TestCafe from npm...');
+
+    execSync(`npm i testcafe@${version}`);
+
     testCafeCmd = 'npx testcafe';
 }
 
 let xvfbCmd = '';
 
 if (os.type() === 'Linux')
-    xvfbCmd = `xvfb-run --server-args="-screen 0 1280x720x24"`;
+    xvfbCmd = `xvfb-run --server-args="-screen 0 1280x720x24" `;
 
 log('Running TestCafe...');
-execSync(`${xvfbCmd}${testCafeCmd} ${testCafeArguments}`, { stdio: 'inherit' });
+log(testCafeCmdArg || testCafeCmd);
+
+execSync(`${xvfbCmd}${testCafeCmdArg || testCafeCmd} ${testCafeArguments}`, { stdio: 'inherit' });
