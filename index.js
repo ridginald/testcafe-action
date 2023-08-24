@@ -55,19 +55,10 @@ else {
     testCafeCmd = 'npx testcafe';
 }
 
-let xvfbCmd = '';
-
-if (os.type() === 'Linux')
-    xvfbCmd = `xvfb-run --server-args="-screen 0 1280x720x24" `;
-
 log('Running TestCafe...');
 log(testCafeCmdArg || testCafeCmd);
 
-execSync(`${xvfbCmd}${testCafeCmdArg || testCafeCmd} ${testCafeArguments}`, { stdio: 'inherit' });
-
-log('Running TestCafe with xvfb...');
-const fullCommand = `${xvfbCmd}${testCafeCmd} ${testCafeArguments}`;
-log('Executing command:', fullCommand);
+execSync(`${testCafeCmdArg || testCafeCmd} ${testCafeArguments}`, { stdio: 'inherit' });
 
 try {
     const output = execSync(fullCommand, { stdio: 'inherit', encoding: 'utf-8' });
