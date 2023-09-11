@@ -58,7 +58,7 @@ else {
 let xvfbCmd = '';
 
 if (os.type() === 'Linux') {
-    xvfbCmd = `xvfb-run --auto-servernum`;
+    xvfbCmd = `xvfb-run --auto-servernum `;
 }
 
 log('Running TestCafe...');
