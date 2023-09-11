@@ -58,7 +58,7 @@ else {
 let xvfbCmd = '';
 
 if (os.type() === 'Linux')
-    xvfbCmd = `xvfb-run --server-args="-screen 0 1280x720x24" `;
+    xvfbCmd = `xvfb-run --auto-servernum`;
 
 log('Running TestCafe...');
 log(testCafeCmdArg || testCafeCmd);
