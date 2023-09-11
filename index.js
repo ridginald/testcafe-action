@@ -58,9 +58,9 @@ else {
 let xvfbCmd = `xvfb-run --auto-servernum `;
 
 log('Running TestCafe...');
-log(testCafeCmdArg || testCafeCmd);
+log(testCafeCmd);
 
-execSync(`${xvfbCmd}${testCafeCmdArg} ${testCafeArguments}`, { stdio: 'inherit' });
+execSync(`${xvfbCmd}${testCafeCmd} ${testCafeArguments}`, { stdio: 'inherit' });
 
 log('Running TestCafe with xvfb...');
 const fullCommand = `${xvfbCmd}${testCafeCmd} ${testCafeArguments}`;
